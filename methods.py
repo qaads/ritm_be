@@ -5,7 +5,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class REST_API_Methods():
+class SingletoneMeta(type):
+    _instances = {}
+    
+    def __call__(class_, *args, **kwargs):
+        if class_ not in class_._instances:
+            class_._instances[class_] = super(SingletoneMeta, class_).__call__(*args, *kwargs)
+        return class_._instances[class_]
+
+class REST_API_Methods(metaclass=SingletoneMeta):
     
     def post(self, method: str, params: dict = None):
         logger.info(f"run request.post func:")
